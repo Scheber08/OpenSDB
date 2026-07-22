@@ -110,6 +110,33 @@
     "warn": "Uyar",
     "comment": "Yorum"
   },
+  "frage": {
+    "emptyQuestion": "⚠️ Lütfen bir soru girin.",
+    "alreadyRunning": "⏳ Zaten devam eden bir isteğiniz var.",
+    "cooldown": "⏳ Tekrar sormadan önce lütfen {seconds} saniye daha bekleyin.",
+    "unreachable": "❌ Bilgi sistemine şu anda ulaşılamıyor.",
+    "timeout": "⌛ Bilgi sistemine yapılan istek çok uzun sürdü.",
+    "serviceUnavailable": "❌ Bilgi sistemi geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+    "invalidResponse": "❌ Bilgi sistemi geçerli bir yanıt döndürmedi.",
+    "unexpectedError": "⚠️ Sorunuz işlenirken beklenmeyen bir hata oluştu.",
+    "refused": "ℹ️ Mevcut kaynaklar bu konuda bilgi içermiyor.",
+    "sourcesLabel": "📚 Kaynaklar:",
+    "truncated": "ℹ️ Yanıt çok uzundu ve kısaltıldı.",
+    "disabled": "🚫 Bilgi sistemi bu sunucuda devre dışı. Bir yönetici etkinleştirebilir."
+  },
+  "setinformationssystem": {
+    "noPermission": "⛔ Uç noktayı değiştirme iznin yok.",
+    "invalidUrl": "⚠️ Bu geçerli bir http(s) URL'si değil.",
+    "setSuccess": "✅ Bilgi sistemi uç noktası {url} olarak ayarlandı.",
+    "showCustom": "🔧 Geçerli uç nokta: {url} (zaman aşımı {timeout} ms).",
+    "showDefault": "🔧 Özel uç nokta ayarlanmadı. Varsayılan kullanılıyor: {url} (zaman aşımı {timeout} ms).",
+    "resetSuccess": "♻️ Uç nokta varsayılana sıfırlandı.",
+    "resetNothing": "ℹ️ Ayarlanmış özel uç nokta yoktu.",
+    "enableSuccess": "✅ Bilgi sistemi (/frage) etkinleştirildi.",
+    "disableSuccess": "🚫 Bilgi sistemi (/frage) devre dışı bırakıldı.",
+    "statusEnabled": "Durum: etkin.",
+    "statusDisabled": "Durum: devre dışı."
+  },
   "scamKeywords": {
     "high": [
       "şimdi talep et",
