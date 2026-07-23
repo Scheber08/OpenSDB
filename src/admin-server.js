@@ -20,6 +20,7 @@ const { logger, requestLogger, getSecurityEvents, getErrorLogs } = require('./ut
 const { validateEnvironment } = require('./utils/envValidator');
 const { SUPPORTED: SUPPORTED_LANGUAGES } = require('./utils/i18n');
 const { MAX_COMMENT_LENGTH } = require('./utils/constants');
+const { normalizeBaseUrl, normalizeTimeout } = require('./utils/informationssystemConfig');
 
 validateEnvironment();
 
@@ -776,6 +777,11 @@ app.get('/api/settings/server', authMiddleware, async (req, res) => {
         verifiedRoleId: '',
         onJoinRoleId: '',
         language: 'en',
+        informationssystemConfig: {
+          enabled: false,
+          baseUrl: '',
+          timeout: null
+        },
         scamDetectionConfig: {
           enabled: false,
           mode: 'default',
@@ -924,6 +930,32 @@ function validateSettingsUpdate(updates) {
   return null;
 }
 
+function normalizeInformationssystemUpdate(updates) {
+  if (updates.informationssystemConfig === undefined) return null;
+  const isc = updates.informationssystemConfig;
+  if (!isc || typeof isc !== 'object' || Array.isArray(isc)) {
+    return 'informationssystemConfig must be an object';
+  }
+  if (isc.baseUrl !== undefined && isc.baseUrl !== '') {
+    const normalized = normalizeBaseUrl(isc.baseUrl);
+    if (!normalized) {
+      return 'Invalid informationssystem baseUrl - must be an http(s) URL without credentials';
+    }
+    isc.baseUrl = normalized;
+  }
+  if (isc.timeout !== undefined && isc.timeout !== null && isc.timeout !== '') {
+    const timeout = normalizeTimeout(isc.timeout);
+    if (timeout === null) {
+      return 'informationssystem timeout must be between 1000 and 600000 ms';
+    }
+    isc.timeout = timeout;
+  }
+  if (isc.enabled !== undefined) {
+    isc.enabled = Boolean(isc.enabled);
+  }
+  return null;
+}
+
 function assignDefined(target, source, fields) {
   for (const field of fields) {
     if (source[field] !== undefined) target[field] = source[field];
@@ -943,6 +975,12 @@ app.put('/api/settings/server', authMiddleware, async (req, res) => {
     const validationError = validateSettingsUpdate(updates);
     if (validationError) {
       return res.status(400).json({ error: validationError });
+    }
+
+    // Validate and normalize the information system endpoint config
+    const iscError = normalizeInformationssystemUpdate(updates);
+    if (iscError) {
+      return res.status(400).json({ error: iscError });
     }
 
     // Get existing settings or create new one
@@ -987,6 +1025,13 @@ app.put('/api/settings/server', authMiddleware, async (req, res) => {
 
       // Mark the nested object as modified for Mongoose
       settings.markModified('scamDetectionConfig');
+    }
+
+    const isc = updates.informationssystemConfig;
+    if (isc) {
+      if (!settings.informationssystemConfig) settings.informationssystemConfig = {};
+      assignDefined(settings.informationssystemConfig, isc, ['enabled', 'baseUrl', 'timeout']);
+      settings.markModified('informationssystemConfig');
     }
 
     await settings.save();
