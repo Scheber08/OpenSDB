@@ -228,6 +228,7 @@ const SettingsPage = () => {
                 },
             }
             const res = await settingsApi.updateServerSettings(updates)
+            hasUnsavedChanges.current = false
             setSettings(res.data)
             setSuccess('Information system settings saved successfully')
             setTimeout(() => setSuccess(null), 3000)
@@ -1442,7 +1443,7 @@ const SettingsPage = () => {
                                         type="checkbox"
                                         checked={settings.informationssystemConfig?.enabled || false}
                                         onChange={(e) =>
-                                            setSettings({
+                                            updateSettings({
                                                 ...settings,
                                                 informationssystemConfig: {
                                                     ...settings.informationssystemConfig,
@@ -1469,7 +1470,7 @@ const SettingsPage = () => {
                                         type="text"
                                         value={settings.informationssystemConfig?.baseUrl || ''}
                                         onChange={(e) =>
-                                            setSettings({
+                                            updateSettings({
                                                 ...settings,
                                                 informationssystemConfig: {
                                                     ...settings.informationssystemConfig,
@@ -1478,7 +1479,7 @@ const SettingsPage = () => {
                                             })
                                         }
                                         placeholder="https://informationssystem.example.org"
-                                        className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                                     />
                                     <p className="mt-1 text-sm text-slate-400">
                                         Endpoint that /ask sends questions to. Leave empty to use the server default. The path /api/v1/query is appended automatically.
@@ -1494,7 +1495,7 @@ const SettingsPage = () => {
                                         max="600000"
                                         value={settings.informationssystemConfig?.timeout ?? ''}
                                         onChange={(e) =>
-                                            setSettings({
+                                            updateSettings({
                                                 ...settings,
                                                 informationssystemConfig: {
                                                     ...settings.informationssystemConfig,
@@ -1503,7 +1504,7 @@ const SettingsPage = () => {
                                             })
                                         }
                                         placeholder="150000"
-                                        className="w-40 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-40 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                                     />
                                     <p className="mt-1 text-sm text-slate-400">
                                         Optional. Between 1000 and 600000 ms. Leave empty for the default.
