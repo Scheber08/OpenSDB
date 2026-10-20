@@ -35,6 +35,9 @@ const envSchema = z.object({
   METRICS_BASIC_PASS: z.string().min(8, 'METRICS_BASIC_PASS must be at least 8 chars'),
 
   ADMIN_SERVER_URL: z.string().url('ADMIN_SERVER_URL must be a valid URL').optional(),
+  INFORMATIONSSYSTEM_BASE_URL: z.string().url('INFORMATIONSSYSTEM_BASE_URL must be a valid URL').or(z.literal('')).optional(),
+  INFORMATIONSSYSTEM_TIMEOUT_MS: z.string().regex(/^\d+$/, 'INFORMATIONSSYSTEM_TIMEOUT_MS must be a number of milliseconds').or(z.literal('')).optional(),
+  ASK_COOLDOWN_MS: z.string().regex(/^\d+$/, 'ASK_COOLDOWN_MS must be a number of milliseconds').or(z.literal('')).optional(),
   DEBUG: z.string().optional(),
 }).superRefine((data, ctx) => {
   if (!data.ADMIN_PASSWORD && !data.ADMIN_PASSWORD_HASH) {
